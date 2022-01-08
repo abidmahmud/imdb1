@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Students from './component/students.component';
 import Movies from './component/movies.component';
+import Rating from './component/rating.component';
 class App extends React.Component {
   render() {
     return (
@@ -11,7 +12,7 @@ class App extends React.Component {
 
         <Movies />
 
-        <Students />
+        {/* <Students /> */}
       </>
     );
   }
