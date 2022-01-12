@@ -15,7 +15,7 @@ class Rating extends React.Component {
     }
 
     getClassName = () => {
-        const { isRated, } = this.props;
+        const { isRated } = this.props;
         const { isHovered } = this.state;
         let className = isRated ? "bi bi-star-fill" : "bi bi-star";
         className += isHovered ? " text-primary " : " ";
@@ -38,3 +38,4 @@ class Rating extends React.Component {
 }
 
 export default Rating;
+

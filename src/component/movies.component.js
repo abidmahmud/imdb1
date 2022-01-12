@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Rating from './rating.component';
-import Table from './table.component';
+import Table from './common/table.component';
 
 class Movies extends React.Component {
     state = {
@@ -19,6 +19,7 @@ class Movies extends React.Component {
         movie.your_rating = !(movie.your_rating);
         this.setState({ movies });
     }
+
     render() {
         const columns = [
             { label: 'Rank', path: 'rank', content: (movie, key) => <td>{movie[key]}</td> },

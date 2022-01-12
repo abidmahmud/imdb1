@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Table from './table.component';
+import Table from './common/table.component';
 
 class Students extends React.Component {
     state = {
