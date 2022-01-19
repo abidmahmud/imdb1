@@ -1,10 +1,10 @@
-const TableBody = ({ data: rows, columns }) => {
+const TableBody = ({ items: rows, columns }) => {
     return (
         <tbody>
             {
-                rows.map(row => {
+                rows.map((row, index) => {
                     return (
-                        <tr>
+                        <tr key={index}>
                             {
                                 columns.map(column => {
                                     return column.content(row, column.path);
