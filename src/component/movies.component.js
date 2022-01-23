@@ -4,6 +4,8 @@ import Table from "./common/table.component";
 import getMovies from "../service/get-movies.service";
 import getGenres from "../service/get-genres.service";
 import _ from "lodash";
+import Pagination from "./common/pagination.component";
+import Filter from "./common/filtering.component";
 
 class Movies extends React.Component {
     state = {
@@ -13,12 +15,15 @@ class Movies extends React.Component {
             path: "id",
             order: "asc",
         },
+        activePage: 1,
+        pageCount: 5,
+        selectedGenre: "All Genres",
     };
 
     componentDidMount() {
         const movies = getMovies();
-        const genres = getGenres();
-        this.setState({ movies, genres });
+        const genres = ["All  Genres", ...getGenres()];
+        this.setState({ ...this.state, movies, genres });
     }
 
     handleToggleRating = (movieRank) => {
@@ -32,18 +37,42 @@ class Movies extends React.Component {
         this.setState({ ...this.state, sortColumn });
     };
 
+    handClick = (activePage) => {
+        this.setState({ ...this.state, activePage });
+    }
+
+    handClickFilter = (selectedGenre) => {
+        this.setState({ ...this.state, selectedGenre });
+    }
+
+    paginateMovies = (movies) => {
+        const { activePage, pageCount } = this.state;
+        const start = pageCount * (activePage - 1);
+        const paginatedMovies = movies.slice(start, start + pageCount);
+        return paginatedMovies;
+    }
+
     sortMovies = (movies) => {
         const { sortColumn } = this.state;
-        const sortedMovies = _.orderBy(
-            movies,
-            [sortColumn.path],
-            [sortColumn.order]
-        );
+        const sortedMovies = _.orderBy(movies, [sortColumn.path], [sortColumn.order]);
         return sortedMovies;
     };
 
+    filterMovies = () => {
+        const { movies, selectedGenre } = this.state;
+        movies.filter(movie => {
+            if (selectedGenre === "All Genres") return true;
+
+            if (movie.genres.includes(selectedGenre)) return true;
+            return false;
+        })
+
+    }
+
     render() {
-        const movies = this.sortMovies(this.state.movies);
+        
+        const paginatedMovies = this.paginateMovies(this.state.movies);
+        const movies = this.sortMovies(paginatedMovies);
         const columns = [
             {
                 label: "Rank",
@@ -95,12 +124,24 @@ class Movies extends React.Component {
         ];
 
         return (
-            <Table
-                items={movies}
-                columns={columns}
-                onSort={this.handleSort}
-                sortColumn={this.state.sortColumn}
-            />
+            <>
+                <div className="container">
+                    <div className="row">
+                        <Filter items={this.state.genres} selectedGenre={this.state.selectedGenre} onClickFilter={this.handClickFilter} />
+                        <div className="col-lg-8">
+                            <Table
+                                items={movies}
+                                columns={columns}
+                                onSort={this.handleSort}
+                                sortColumn={this.state.sortColumn}
+                            />
+                            <Pagination totalItems={this.state.movies.length} pageCount={this.state.pageCount} activePage={this.state.activePage} onClickPage={this.handClick} />
+                        </div>
+                    </div>
+                </div>
+
+            </>
+
         );
     }
 }
