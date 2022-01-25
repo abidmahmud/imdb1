@@ -30,7 +30,7 @@ class Movies extends React.Component {
         const movies = [...this.state.movies];
         const movie = movies.find((movie) => movie.id === movieRank);
         movie.your_rating = !movie.your_rating;
-        this.setState({ movies });
+        this.setState({ ...this.state, movies });
     };
 
     handleSort = (sortColumn) => {
@@ -60,18 +60,18 @@ class Movies extends React.Component {
 
     filterMovies = () => {
         const { movies, selectedGenre } = this.state;
-        movies.filter(movie => {
+        const filteredMovies = movies.filter(movie => {
             if (selectedGenre === "All Genres") return true;
 
             if (movie.genres.includes(selectedGenre)) return true;
             return false;
-        })
-
+        });
+        return filteredMovies;
     }
 
     render() {
-        
-        const paginatedMovies = this.paginateMovies(this.state.movies);
+        const filteredMovies = this.filterMovies();
+        const paginatedMovies = this.paginateMovies(filteredMovies);
         const movies = this.sortMovies(paginatedMovies);
         const columns = [
             {
@@ -135,7 +135,7 @@ class Movies extends React.Component {
                                 onSort={this.handleSort}
                                 sortColumn={this.state.sortColumn}
                             />
-                            <Pagination totalItems={this.state.movies.length} pageCount={this.state.pageCount} activePage={this.state.activePage} onClickPage={this.handClick} />
+                            <Pagination totalItems={filteredMovies.length} pageCount={this.state.pageCount} activePage={this.state.activePage} onClickPage={this.handClick} />
                         </div>
                     </div>
                 </div>

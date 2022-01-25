@@ -5,7 +5,14 @@ const Filter = ({ items, selectedGenre, onClickFilter }) => {
                 {
                     items.map(item => {
                         return (
-                            <li onClick={() => onClickFilter(item)} className={selectedGenre === item ? " list-group-item active" : " list-group-item"}>
+                            <li
+                                onClick={() => onClickFilter(item)}
+                                className={
+                                    selectedGenre === item
+                                        ? " list-group-item active"
+                                        : " list-group-item"
+                                }
+                            >
                                 {item}
                             </li>
                         );
